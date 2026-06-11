@@ -3,318 +3,519 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Proposal Writer — Upwork cover letters that get replies</title>
+<title>Proposal Studio — Upwork proposals & profile intelligence</title>
 <style>
   :root {
-    --bg: #ffffff;
-    --surface: #fafafa;
-    --surface-2: #f3f3f3;
-    --border: #e2e2e2;
-    --border-focus: #111111;
-    --text: #111111;
-    --text-dim: #555555;
-    --text-faint: #9a9a9a;
-    --accent: #111111;
-    --accent-dim: #f3f3f3;
+    --text: #0b0b0f;
+    --text-dim: #4a4a52;
+    --text-faint: #8e8e93;
+    --glass: rgba(255, 255, 255, 0.52);
+    --glass-strong: rgba(255, 255, 255, 0.72);
+    --glass-input: rgba(255, 255, 255, 0.55);
+    --stroke: rgba(255, 255, 255, 0.65);
+    --stroke-soft: rgba(11, 11, 15, 0.08);
+    --accent: #0b0b0f;
     --accent-text: #ffffff;
-    --radius: 12px;
-    --mono: "SF Mono", ui-monospace, Menlo, monospace;
+    --shadow: 0 8px 32px rgba(11, 11, 15, 0.10), 0 1px 2px rgba(11, 11, 15, 0.06);
+    --shadow-sm: 0 2px 12px rgba(11, 11, 15, 0.07);
+    --blob-a: rgba(190, 200, 220, 0.55);
+    --blob-b: rgba(214, 205, 228, 0.5);
+    --blob-c: rgba(200, 216, 212, 0.5);
+    --bg-base: #eef0f4;
+    --r-lg: 26px;
+    --r-md: 16px;
+    --r-pill: 999px;
   }
   [data-theme="dark"] {
-    --bg: #0a0a0a;
-    --surface: #141414;
-    --surface-2: #1d1d1d;
-    --border: #2c2c2c;
-    --border-focus: #f2f2f2;
-    --text: #f2f2f2;
-    --text-dim: #a8a8a8;
-    --text-faint: #6c6c6c;
-    --accent: #f2f2f2;
-    --accent-dim: #1d1d1d;
-    --accent-text: #0a0a0a;
+    --text: #f5f5f7;
+    --text-dim: #b6b6bd;
+    --text-faint: #7c7c84;
+    --glass: rgba(28, 28, 32, 0.55);
+    --glass-strong: rgba(38, 38, 44, 0.66);
+    --glass-input: rgba(16, 16, 20, 0.45);
+    --stroke: rgba(255, 255, 255, 0.14);
+    --stroke-soft: rgba(255, 255, 255, 0.08);
+    --accent: #f5f5f7;
+    --accent-text: #0b0b0f;
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.35);
+    --blob-a: rgba(70, 80, 105, 0.32);
+    --blob-b: rgba(85, 72, 105, 0.28);
+    --blob-c: rgba(60, 85, 80, 0.26);
+    --bg-base: #060608;
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
   body {
-    background: var(--bg);
+    background: var(--bg-base);
     color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
     font-size: 15px;
     line-height: 1.55;
     min-height: 100vh;
-    transition: background .2s ease, color .2s ease;
+    transition: background .3s ease, color .3s ease;
+    -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 860px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  /* ambient liquid background */
+  .ambient {
+    position: fixed; inset: 0; z-index: -1; overflow: hidden;
+    background: var(--bg-base);
+    transition: background .3s ease;
+  }
+  .ambient i {
+    position: absolute; border-radius: 50%; filter: blur(70px);
+    animation: drift 26s ease-in-out infinite alternate;
+  }
+  .ambient i:nth-child(1) { width: 55vw; height: 55vw; background: var(--blob-a); top: -18%; left: -12%; }
+  .ambient i:nth-child(2) { width: 48vw; height: 48vw; background: var(--blob-b); bottom: -20%; right: -10%; animation-delay: -8s; animation-duration: 32s; }
+  .ambient i:nth-child(3) { width: 36vw; height: 36vw; background: var(--blob-c); top: 38%; left: 42%; animation-delay: -16s; animation-duration: 38s; }
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(6vw, 4vh) scale(1.12); }
+  }
+  @media (prefers-reduced-motion: reduce) { .ambient i { animation: none; } }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 24px 20px 90px; }
+
+  /* glass primitives */
+  .glass {
+    background: var(--glass);
+    backdrop-filter: blur(28px) saturate(170%);
+    -webkit-backdrop-filter: blur(28px) saturate(170%);
+    border: 1px solid var(--stroke);
+    box-shadow: var(--shadow), inset 0 1px 0 var(--stroke);
+  }
 
   header {
     display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 28px;
+    padding: 14px 20px; border-radius: var(--r-lg);
+    margin-bottom: 18px; position: sticky; top: 14px; z-index: 20;
   }
   .brand { display: flex; align-items: center; gap: 12px; }
   .brand .logo {
-    width: 38px; height: 38px; border-radius: 10px;
-    background: var(--accent);
-    display: grid; place-items: center;
-    color: var(--accent-text); font-weight: 800; font-size: 18px;
+    width: 40px; height: 40px; border-radius: 13px;
+    background: var(--accent); color: var(--accent-text);
+    display: grid; place-items: center; font-weight: 800; font-size: 18px;
+    box-shadow: var(--shadow-sm);
   }
-  .brand h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
-  .brand p { font-size: 12.5px; color: var(--text-dim); }
+  .brand h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.02em; }
+  .brand p { font-size: 12px; color: var(--text-dim); }
+  .header-actions { display: flex; gap: 8px; }
   .icon-btn {
-    background: var(--surface); border: 1px solid var(--border);
-    color: var(--text-dim); border-radius: 10px; padding: 8px 14px;
+    background: var(--glass-input); border: 1px solid var(--stroke-soft);
+    color: var(--text-dim); border-radius: var(--r-pill); padding: 8px 15px;
     cursor: pointer; font-size: 13.5px; display: flex; align-items: center; gap: 7px;
-    transition: border-color .15s, color .15s;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    transition: all .18s ease; font-family: inherit;
   }
-  .icon-btn:hover { border-color: var(--border-focus); color: var(--text); }
+  .icon-btn:hover { color: var(--text); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
   .key-dot {
     width: 8px; height: 8px; border-radius: 50%;
     background: transparent; border: 1.5px solid var(--text-faint);
   }
   .key-dot.ok { background: var(--text); border-color: var(--text); }
-  .header-actions { display: flex; gap: 8px; }
 
-  /* steps nav */
-  .steps {
-    display: flex; gap: 6px; margin-bottom: 24px;
+  /* segmented control */
+  .seg {
+    display: flex; padding: 5px; border-radius: var(--r-pill);
+    margin-bottom: 18px; gap: 4px;
   }
+  .seg button {
+    flex: 1; border: none; background: transparent; color: var(--text-dim);
+    padding: 11px 10px; border-radius: var(--r-pill); font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: all .22s cubic-bezier(.2,.8,.2,1);
+  }
+  .seg button.active {
+    background: var(--accent); color: var(--accent-text);
+    box-shadow: var(--shadow-sm); transform: scale(1.015);
+  }
+
+  /* steps */
+  .steps { display: flex; gap: 8px; margin-bottom: 18px; }
   .step-pill {
-    flex: 1; text-align: center; padding: 9px 6px; border-radius: 10px;
-    background: var(--surface); border: 1px solid var(--border);
+    flex: 1; text-align: center; padding: 10px 6px; border-radius: var(--r-pill);
+    background: var(--glass-input); border: 1px solid var(--stroke-soft);
     color: var(--text-faint); font-size: 13px; font-weight: 600;
-    cursor: pointer; user-select: none; transition: all .15s;
+    cursor: pointer; user-select: none; transition: all .2s ease;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   }
-  .step-pill.active { background: var(--accent-dim); border-color: var(--border-focus); color: var(--accent); }
+  .step-pill.active { background: var(--glass-strong); border-color: var(--stroke); color: var(--text); box-shadow: var(--shadow-sm); }
   .step-pill.done { color: var(--text-dim); }
-  .step-pill.done::before { content: "✓ "; color: var(--accent); }
+  .step-pill.done::before { content: "✓ "; }
 
-  .card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 24px; margin-bottom: 18px;
-  }
-  .card h2 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .card { border-radius: var(--r-lg); padding: 26px; margin-bottom: 18px; }
+  .card h2 { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 4px; }
   .card .sub { color: var(--text-dim); font-size: 13.5px; margin-bottom: 18px; }
 
   label { display: block; font-size: 13px; font-weight: 600; color: var(--text-dim); margin: 16px 0 6px; }
   label:first-of-type { margin-top: 0; }
   label .opt { font-weight: 400; color: var(--text-faint); }
   textarea, input[type="text"], input[type="password"], select {
-    width: 100%; background: var(--surface-2); border: 1px solid var(--border);
-    border-radius: 9px; color: var(--text); padding: 11px 13px;
+    width: 100%; background: var(--glass-input); border: 1px solid var(--stroke-soft);
+    border-radius: var(--r-md); color: var(--text); padding: 12px 14px;
     font-size: 14px; font-family: inherit; resize: vertical;
-    transition: border-color .15s;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    transition: border-color .18s, box-shadow .18s;
   }
-  textarea:focus, input:focus, select:focus { outline: none; border-color: var(--border-focus); }
+  textarea:focus, input:focus, select:focus {
+    outline: none; border-color: var(--text-faint);
+    box-shadow: 0 0 0 3px var(--stroke-soft);
+  }
   textarea::placeholder, input::placeholder { color: var(--text-faint); }
   .hint { font-size: 12px; color: var(--text-faint); margin-top: 5px; }
-
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  @media (max-width: 640px) { .row { grid-template-columns: 1fr; } }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  @media (max-width: 640px) { .row, .row3 { grid-template-columns: 1fr; } }
 
   .btn {
     background: var(--accent); color: var(--accent-text); border: none;
-    border-radius: 10px; padding: 12px 22px; font-size: 14.5px; font-weight: 700;
-    cursor: pointer; transition: filter .15s, transform .05s;
+    border-radius: var(--r-pill); padding: 13px 24px; font-size: 14.5px; font-weight: 700;
+    cursor: pointer; font-family: inherit;
     display: inline-flex; align-items: center; gap: 8px;
+    box-shadow: var(--shadow-sm);
+    transition: transform .15s cubic-bezier(.2,.8,.2,1), box-shadow .15s, opacity .15s;
   }
-  .btn:hover { filter: brightness(1.1); }
-  .btn:active { transform: translateY(1px); }
-  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn:hover { transform: translateY(-1px) scale(1.01); box-shadow: var(--shadow); }
+  .btn:active { transform: translateY(0) scale(.99); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
   .btn.ghost {
-    background: transparent; color: var(--text-dim);
-    border: 1px solid var(--border);
+    background: var(--glass-input); color: var(--text-dim);
+    border: 1px solid var(--stroke-soft); box-shadow: none;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   }
-  .btn.ghost:hover { color: var(--text); border-color: var(--border-focus); }
+  .btn.ghost:hover { color: var(--text); }
   .actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 22px; }
   .actions .right { display: flex; gap: 10px; margin-left: auto; }
 
-  .pane { display: none; }
-  .pane.active { display: block; animation: fadeIn .2s ease; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  .pane, .view { display: none; }
+  .pane.active, .view.active { display: block; animation: rise .28s cubic-bezier(.2,.8,.2,1); }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-  /* output */
   .status-line {
-    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
-    background: var(--surface-2); border-radius: 9px; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px; padding: 11px 15px;
+    background: var(--glass-input); border: 1px solid var(--stroke-soft);
+    border-radius: var(--r-md); margin-bottom: 16px;
     font-size: 13.5px; color: var(--text-dim);
   }
   .spinner {
-    width: 14px; height: 14px; border: 2px solid var(--border);
-    border-top-color: var(--accent); border-radius: 50%;
+    width: 14px; height: 14px; border: 2px solid var(--stroke-soft);
+    border-top-color: var(--text); border-radius: 50%;
     animation: spin .7s linear infinite; flex-shrink: 0;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
   .letter {
-    background: var(--surface-2); border: 1px solid var(--border);
-    border-radius: 10px; padding: 20px 22px; white-space: pre-wrap;
+    background: var(--glass-input); border: 1px solid var(--stroke-soft);
+    border-radius: var(--r-md); padding: 22px 24px; white-space: pre-wrap;
     font-size: 14.5px; line-height: 1.7; min-height: 120px;
   }
   .letter:empty::before { content: "Your letter will appear here."; color: var(--text-faint); }
 
+  .analysis {
+    background: var(--glass-input); border: 1px solid var(--stroke-soft);
+    border-radius: var(--r-md); padding: 22px 24px;
+    font-size: 14.5px; line-height: 1.7; min-height: 120px;
+  }
+  .analysis:empty::before { content: "Your analysis will appear here."; color: var(--text-faint); }
+  .analysis h3 { font-size: 15px; font-weight: 700; margin: 18px 0 8px; letter-spacing: -0.01em; }
+  .analysis h3:first-child { margin-top: 0; }
+  .analysis ul, .analysis ol { margin: 6px 0 12px 20px; }
+  .analysis li { margin-bottom: 5px; }
+  .analysis p { margin-bottom: 10px; }
+  .analysis strong { font-weight: 700; }
+
   .checklist { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
   .check {
-    font-size: 12px; padding: 5px 11px; border-radius: 999px;
-    border: 1px solid var(--border); color: var(--text-dim);
+    font-size: 12px; padding: 5px 12px; border-radius: var(--r-pill);
+    border: 1px solid var(--stroke-soft); color: var(--text-dim);
     display: inline-flex; align-items: center; gap: 6px;
+    background: var(--glass-input);
   }
   .check.pass { border-color: var(--text); color: var(--text); }
-  .check.fail { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .check.fail { background: var(--text); color: var(--bg-base); border-color: var(--text); }
 
   .refine-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
   .chip {
-    background: var(--surface-2); border: 1px solid var(--border);
-    color: var(--text-dim); border-radius: 999px; padding: 7px 15px;
-    font-size: 13px; cursor: pointer; transition: all .15s;
+    background: var(--glass-input); border: 1px solid var(--stroke-soft);
+    color: var(--text-dim); border-radius: var(--r-pill); padding: 8px 16px;
+    font-size: 13px; cursor: pointer; font-family: inherit;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    transition: all .18s ease;
   }
-  .chip:hover { border-color: var(--border-focus); color: var(--text); }
-  .chip:disabled { opacity: .4; cursor: not-allowed; }
+  .chip:hover { color: var(--text); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+  .chip:disabled { opacity: .4; cursor: not-allowed; transform: none; }
 
-  .copy-feedback { color: var(--accent); font-size: 13px; }
+  .copy-feedback { color: var(--text); font-size: 13px; }
   .meta { font-size: 12px; color: var(--text-faint); margin-top: 10px; }
+
+  /* memory */
+  .memory-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .memory-list { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+  .memory-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: var(--glass-input); border: 1px solid var(--stroke-soft);
+    border-radius: var(--r-md); padding: 11px 14px; font-size: 13.5px;
+    color: var(--text-dim);
+  }
+  .memory-item .when { font-size: 11px; color: var(--text-faint); white-space: nowrap; padding-top: 2px; }
+  .memory-item .txt { flex: 1; }
+  .memory-item .del {
+    background: none; border: none; color: var(--text-faint); cursor: pointer;
+    font-size: 15px; padding: 0 2px; line-height: 1; font-family: inherit;
+  }
+  .memory-item .del:hover { color: var(--text); }
+  .memory-empty { font-size: 13px; color: var(--text-faint); margin-top: 12px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11.5px; font-weight: 600; color: var(--text-dim);
+    background: var(--glass-input); border: 1px solid var(--stroke-soft);
+    padding: 4px 11px; border-radius: var(--r-pill);
+  }
 
   /* modal */
   .modal-bg {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6);
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     z-index: 50; align-items: flex-start; justify-content: center; padding: 60px 20px;
   }
   .modal-bg.open { display: flex; }
-  .modal {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 26px; width: 100%; max-width: 480px;
-  }
+  .modal { border-radius: var(--r-lg); padding: 28px; width: 100%; max-width: 480px; }
   .modal h3 { font-size: 16px; margin-bottom: 4px; }
   .modal .sub { color: var(--text-dim); font-size: 13px; margin-bottom: 14px; }
 
   .err {
-    background: var(--surface-2); border: 1.5px solid var(--text); color: var(--text);
-    border-radius: 9px; padding: 12px 15px; font-size: 13.5px; margin-bottom: 16px;
+    background: var(--glass-strong); border: 1.5px solid var(--text); color: var(--text);
+    border-radius: var(--r-md); padding: 12px 15px; font-size: 13.5px; margin-bottom: 16px;
     display: none; white-space: pre-wrap; font-weight: 500;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   }
-  .err::before { content: "⚠ "; }
   .err.show { display: block; }
+  .err::before { content: "⚠ "; }
 
-  .saved-note { font-size: 12px; color: var(--accent); opacity: 0; transition: opacity .3s; }
+  .saved-note { font-size: 12px; color: var(--text-dim); opacity: 0; transition: opacity .3s; }
   .saved-note.show { opacity: 1; }
 </style>
 </head>
 <body>
+<div class="ambient"><i></i><i></i><i></i></div>
+
 <div class="wrap">
-  <header>
+  <header class="glass">
     <div class="brand">
       <div class="logo">P</div>
       <div>
-        <h1>Proposal Writer</h1>
-        <p>Upwork cover letters that open with a hook, not a pitch</p>
+        <h1>Proposal Studio</h1>
+        <p>Proposals that hook. A profile that gets found.</p>
       </div>
     </div>
     <div class="header-actions">
-      <button class="icon-btn" id="themeBtn" title="Toggle black / white theme" aria-label="Toggle theme">◐</button>
+      <button class="icon-btn" id="themeBtn" title="Toggle light / dark glass" aria-label="Toggle theme">◐</button>
       <button class="icon-btn" id="settingsBtn"><span class="key-dot" id="keyDot"></span> Settings</button>
     </div>
   </header>
 
-  <div class="steps">
-    <div class="step-pill active" data-step="1">1 · Job post</div>
-    <div class="step-pill" data-step="2">2 · Your context</div>
-    <div class="step-pill" data-step="3">3 · Letter</div>
+  <div class="seg glass" role="tablist">
+    <button class="active" data-view="proposal" role="tab">✍︎ Write a proposal</button>
+    <button data-view="analyzer" role="tab">◎ Analyze my profile</button>
   </div>
 
   <div class="err" id="errBox"></div>
 
-  <!-- STEP 1 -->
-  <div class="pane active" id="pane1">
-    <div class="card">
-      <h2>Paste the job post</h2>
-      <p class="sub">The full text of the Upwork job post. The opener question gets built from real pain points found in here.</p>
+  <!-- ============ PROPOSAL VIEW ============ -->
+  <div class="view active" id="view-proposal">
+    <div class="steps">
+      <div class="step-pill active" data-step="1">1 · Job post</div>
+      <div class="step-pill" data-step="2">2 · Your context</div>
+      <div class="step-pill" data-step="3">3 · Letter</div>
+    </div>
 
-      <label for="jobPost">Job post</label>
-      <textarea id="jobPost" rows="10" placeholder="Paste the entire Upwork job post here..."></textarea>
+    <!-- STEP 1 -->
+    <div class="pane active" id="pane1">
+      <div class="card glass">
+        <h2>Paste the job post</h2>
+        <p class="sub">The full text of the Upwork job post. The opener question gets built from real pain points found in here.</p>
+
+        <label for="jobPost">Job post</label>
+        <textarea id="jobPost" rows="10" placeholder="Paste the entire Upwork job post here..."></textarea>
+
+        <div class="row" style="margin-top:16px">
+          <div>
+            <label for="clientName">Client first name <span class="opt">(optional)</span></label>
+            <input type="text" id="clientName" placeholder="e.g. Sarah">
+            <p class="hint">Used in the salutation. Leave blank for "Hi there,".</p>
+          </div>
+          <div>
+            <label for="clientProfile">Client profile signals <span class="opt">(optional)</span></label>
+            <input type="text" id="clientProfile" placeholder="e.g. $40k spent, 80% hire rate, repeat hirer">
+            <p class="hint">Total spend, hire rate, past jobs, reviews they left.</p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <div class="right">
+            <button class="btn" id="toStep2">Next: your context →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="pane" id="pane2">
+      <div class="card glass">
+        <h2>Your context <span class="saved-note" id="savedNote">saved ✓</span></h2>
+        <p class="sub">This is what makes the letter educate instead of boast. Saved in your browser so you only fill it once.</p>
+
+        <label for="experience">Strongest relevant experience for this job</label>
+        <textarea id="experience" rows="3" placeholder="Past work that maps directly to this job. Include portfolio links if you have them."></textarea>
+
+        <label for="tools">Tools you actually use</label>
+        <textarea id="tools" rows="2" placeholder="e.g. Figma, Webflow, GA4, Hotjar..."></textarea>
+
+        <label for="workflow">Your real workflow, step by step</label>
+        <textarea id="workflow" rows="4" placeholder="1. Audit the existing funnel&#10;2. Wireframe in Figma&#10;3. ..."></textarea>
+
+        <label for="approach">How you'd approach this specific job <span class="opt">(optional but powerful)</span></label>
+        <textarea id="approach" rows="3" placeholder="Anything specific to this niche, stack, or industry that you'd do."></textarea>
+
+        <div style="margin-top:16px" id="proposalMemoryBadge"></div>
+
+        <div class="actions">
+          <button class="btn ghost" id="backTo1">← Back</button>
+          <div class="right">
+            <button class="btn" id="generateBtn">✦ Write my proposal</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="pane" id="pane3">
+      <div class="card glass">
+        <h2>Your cover letter</h2>
+        <p class="sub">Plain text, ready to paste into Upwork.</p>
+
+        <div class="status-line" id="statusLine" style="display:none">
+          <div class="spinner"></div>
+          <span id="statusText">Researching the niche...</span>
+        </div>
+
+        <div class="letter" id="letterOut"></div>
+
+        <div class="checklist" id="checklist"></div>
+        <p class="meta" id="metaLine"></p>
+
+        <div class="refine-bar">
+          <button class="chip refine" data-instr="Make it shorter and tighter. Cut anything that is not pulling weight. Keep the hook question, salutation, research backing, process, one strategic question, and soft CTA.">✂ Shorter</button>
+          <button class="chip refine" data-instr="Rework the opening hook question with a completely different technical angle. Research a new angle if needed. Keep everything else roughly the same.">↻ New hook angle</button>
+          <button class="chip refine" data-instr="Make the tone slightly more casual and conversational while staying professional. No slang, just looser sentences and a more human rhythm.">☺ More casual</button>
+          <button class="chip refine" data-instr="Run another strict humanizer pass. Hunt for any remaining AI tells: stock phrasing, uniform sentence length, rule-of-three patterns, hedging filler, promotional adjectives. Rewrite only what needs it.">⚡ Humanize again</button>
+        </div>
+
+        <div class="actions">
+          <button class="btn ghost" id="backTo2">← Edit context</button>
+          <div class="right">
+            <span class="copy-feedback" id="copyFeedback" style="align-self:center"></span>
+            <button class="btn ghost" id="regenBtn">↻ Regenerate</button>
+            <button class="btn" id="copyBtn">Copy letter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ANALYZER VIEW ============ -->
+  <div class="view" id="view-analyzer">
+    <div class="card glass">
+      <h2>Analyze my profile</h2>
+      <p class="sub">Find out why invites are slow and why proposals get opened less than they should. Each analysis is distilled into memory, so the next one (and every future proposal) starts smarter.</p>
+
+      <label for="profileText">Your Upwork profile</label>
+      <textarea id="profileText" rows="7" placeholder="Paste your profile: title, overview/bio, skills list, and anything from your portfolio descriptions."></textarea>
 
       <div class="row" style="margin-top:16px">
         <div>
-          <label for="clientName">Client first name <span class="opt">(optional)</span></label>
-          <input type="text" id="clientName" placeholder="e.g. Sarah">
-          <p class="hint">Used in the salutation. Leave blank for "Hi there,".</p>
+          <label for="azNiche">Niche / category</label>
+          <input type="text" id="azNiche" placeholder="e.g. Webflow development, B2B copywriting">
         </div>
         <div>
-          <label for="clientProfile">Client profile signals <span class="opt">(optional)</span></label>
-          <input type="text" id="clientProfile" placeholder="e.g. $40k spent, 80% hire rate, repeat hirer">
-          <p class="hint">Total spend, hire rate, past jobs, reviews they left.</p>
+          <label for="azRate">Hourly rate / typical project price</label>
+          <input type="text" id="azRate" placeholder="e.g. $45/hr or $800 fixed">
         </div>
       </div>
+
+      <div class="row3" style="margin-top:16px">
+        <div>
+          <label for="azInvites">Invites (last 30 days)</label>
+          <input type="text" id="azInvites" placeholder="e.g. 1">
+        </div>
+        <div>
+          <label for="azProposals">Proposals sent (last 30 days)</label>
+          <input type="text" id="azProposals" placeholder="e.g. 25">
+        </div>
+        <div>
+          <label for="azViews">Of those, viewed / replied</label>
+          <input type="text" id="azViews" placeholder="e.g. 4 viewed, 1 reply">
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:16px">
+        <div>
+          <label for="azStats">JSS, hire rate, badges <span class="opt">(optional)</span></label>
+          <input type="text" id="azStats" placeholder="e.g. JSS 92%, Top Rated, 60% hire rate">
+        </div>
+        <div>
+          <label for="azHistory">Anything that changed recently <span class="opt">(optional)</span></label>
+          <input type="text" id="azHistory" placeholder="e.g. raised my rate in May, new niche, bad review">
+        </div>
+      </div>
+
+      <label for="azSample" style="margin-top:16px">A recent proposal that got no view <span class="opt">(optional, helps a lot)</span></label>
+      <textarea id="azSample" rows="4" placeholder="Paste one proposal that never got opened or answered."></textarea>
 
       <div class="actions">
         <div class="right">
-          <button class="btn" id="toStep2">Next: your context →</button>
+          <button class="btn" id="analyzeBtn">◎ Analyze my profile</button>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- STEP 2 -->
-  <div class="pane" id="pane2">
-    <div class="card">
-      <h2>Your context <span class="saved-note" id="savedNote">saved ✓</span></h2>
-      <p class="sub">This is what makes the letter educate instead of boast. Saved in your browser so you only fill it once.</p>
+    <div class="card glass" id="analysisCard" style="display:none">
+      <h2>Analysis</h2>
+      <p class="sub">Grounded in your numbers, current Upwork behavior, and what past analyses already taught us.</p>
 
-      <label for="experience">Strongest relevant experience for this job</label>
-      <textarea id="experience" rows="3" placeholder="Past work that maps directly to this job. Include portfolio links if you have them."></textarea>
-
-      <label for="tools">Tools you actually use</label>
-      <textarea id="tools" rows="2" placeholder="e.g. Figma, Webflow, GA4, Hotjar..."></textarea>
-
-      <label for="workflow">Your real workflow, step by step</label>
-      <textarea id="workflow" rows="4" placeholder="1. Audit the existing funnel&#10;2. Wireframe in Figma&#10;3. ..."></textarea>
-
-      <label for="approach">How you'd approach this specific job <span class="opt">(optional but powerful)</span></label>
-      <textarea id="approach" rows="3" placeholder="Anything specific to this niche, stack, or industry that you'd do."></textarea>
-
-      <div class="actions">
-        <button class="btn ghost" id="backTo1">← Back</button>
-        <div class="right">
-          <button class="btn" id="generateBtn">✦ Write my proposal</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- STEP 3 -->
-  <div class="pane" id="pane3">
-    <div class="card">
-      <h2>Your cover letter</h2>
-      <p class="sub">Plain text, ready to paste into Upwork.</p>
-
-      <div class="status-line" id="statusLine" style="display:none">
+      <div class="status-line" id="azStatusLine" style="display:none">
         <div class="spinner"></div>
-        <span id="statusText">Researching the niche...</span>
+        <span id="azStatusText">Reading your profile...</span>
       </div>
 
-      <div class="letter" id="letterOut"></div>
-
-      <div class="checklist" id="checklist"></div>
-      <p class="meta" id="metaLine"></p>
-
-      <div class="refine-bar">
-        <button class="chip refine" data-instr="Make it shorter and tighter. Cut anything that is not pulling weight. Keep the hook question, salutation, research backing, process, one strategic question, and soft CTA.">✂ Shorter</button>
-        <button class="chip refine" data-instr="Rework the opening hook question with a completely different technical angle. Research a new angle if needed. Keep everything else roughly the same.">↻ New hook angle</button>
-        <button class="chip refine" data-instr="Make the tone slightly more casual and conversational while staying professional. No slang, just looser sentences and a more human rhythm.">☺ More casual</button>
-        <button class="chip refine" data-instr="Run another strict humanizer pass. Hunt for any remaining AI tells: stock phrasing, uniform sentence length, rule-of-three patterns, hedging filler, promotional adjectives. Rewrite only what needs it.">⚡ Humanize again</button>
-      </div>
+      <div class="analysis" id="analysisOut"></div>
+      <p class="meta" id="azMeta"></p>
 
       <div class="actions">
-        <button class="btn ghost" id="backTo2">← Edit context</button>
         <div class="right">
-          <span class="copy-feedback" id="copyFeedback" style="align-self:center"></span>
-          <button class="btn ghost" id="regenBtn">↻ Regenerate</button>
-          <button class="btn" id="copyBtn">Copy letter</button>
+          <span class="copy-feedback" id="azCopyFeedback" style="align-self:center"></span>
+          <button class="btn ghost" id="azCopyBtn">Copy analysis</button>
         </div>
       </div>
+    </div>
+
+    <div class="card glass">
+      <div class="memory-head">
+        <h2>Learning memory <span class="badge" id="memCount">0 insights</span></h2>
+        <button class="chip" id="clearMemBtn">Clear all</button>
+      </div>
+      <p class="sub">Distilled from every analysis you run. Injected into future analyses and every proposal, so the app gets smarter about <em>you</em> over time. Stored only in this browser.</p>
+      <div class="memory-list" id="memoryList"></div>
+      <p class="memory-empty" id="memoryEmpty">No insights yet. Run your first analysis and this fills up.</p>
     </div>
   </div>
 </div>
 
 <!-- SETTINGS MODAL -->
 <div class="modal-bg" id="modalBg">
-  <div class="modal">
+  <div class="modal glass">
     <h3>Settings</h3>
     <p class="sub">Your API key is stored only in this browser (localStorage) and sent only to api.anthropic.com.</p>
 
@@ -331,9 +532,9 @@
 
     <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
       <input type="checkbox" id="webSearchToggle" checked style="width:auto">
-      Use web search for the research step
+      Use web search (research step & current Upwork best practices)
     </label>
-    <p class="hint">Finds real stats, studies and reference cases to back the opening hook. Recommended.</p>
+    <p class="hint">Finds real stats, studies and reference cases. Recommended.</p>
 
     <div class="actions">
       <div class="right">
@@ -347,8 +548,8 @@
 <script>
 "use strict";
 
-/* ---------- system prompt: the upwork-proposal skill, distilled ---------- */
-const SYSTEM_PROMPT = `You are an expert Upwork proposal writer. You write cover letters that read like a real person wrote them, grounded in genuine technical research. The goal is a short letter that gives the client value and shows understanding, not a salesy pitch.
+/* ================= system prompts ================= */
+const PROPOSAL_SYSTEM = `You are an expert Upwork proposal writer. You write cover letters that read like a real person wrote them, grounded in genuine technical research. The goal is a short letter that gives the client value and shows understanding, not a salesy pitch.
 
 ## Research first
 Before writing, use web search (if available) to find concrete technical or industry detail tied to the work itself: the platform, the stack, the deliverable, the niche pattern, or the specific pain the client described. Look for:
@@ -374,6 +575,9 @@ Do NOT use the client's location or local businesses as the basis of the opener.
 - Keep it short and skimmable. This is an Upwork cover letter, not a job application.
 - Write at a human cadence. Vary sentence length. Short ones too.
 
+## Use what you know about this freelancer
+If the user message includes a "learning memory" section with insights from past profile analyses, apply them. They are known weaknesses and strengths of this specific freelancer. Avoid the failure patterns the memory describes and lean into the strengths.
+
 ## Humanizer pass (mandatory, before output)
 Before producing the final letter, silently run an AI-tell pass over your draft and fix:
 - Stock AI phrasing ("I'd love to", "I noticed that", "delve", "leverage", "seamless", "robust", "I'm excited to")
@@ -385,17 +589,58 @@ Before producing the final letter, silently run an AI-tell pass over your draft 
 ## Output format
 Output ONLY the final letter as plain text the user can paste straight into Upwork. No preamble, no headings, no markdown, no commentary, no quotes around it. Just the letter.`;
 
-/* ---------- state ---------- */
+const ANALYZER_SYSTEM = `You are a blunt, expert Upwork growth consultant. Freelancers come to you when invites dry up and proposals stop getting opened. You diagnose from their actual numbers and profile text, not from generic advice.
+
+## How to work
+- If web search is available, use it to check current Upwork search/ranking behavior, boost/Connects dynamics, and what currently moves invite volume and proposal open rates. Never fabricate stats; name sources when you cite them.
+- Ground every claim in the numbers and text the user gave you. Quote their own profile back at them when it is part of the problem.
+- Compare their funnel to realistic benchmarks (state them as approximate).
+- If a "learning memory" of past analyses is provided, treat it as history: note what was already diagnosed, whether the numbers moved since, and go deeper instead of repeating it.
+- Be direct and specific. No flattery padding, no "great start!". Every point must be actionable.
+
+## Output format (markdown, exactly these sections)
+## TL;DR
+2-3 sentences: the single biggest reason for low invites, and the single biggest reason proposals are not getting viewed.
+
+## Why you're getting fewer invites
+The invite funnel is search impressions → profile clicks → invites. Diagnose where it breaks for them: title keywords vs what clients actually search, first two lines of the overview (what shows in search results), JSS/badges, rate positioning vs niche, niche clarity, portfolio signals, availability badge. Reference their actual title/overview text.
+
+## Why your proposals aren't getting viewed
+Views are decided by what the client sees in the proposal list: the first line preview, bid position, boost dynamics, speed to apply, and profile thumbnail signals (photo, title, JSS, rate). If they pasted a sample proposal, tear down its first line specifically. Distinguish "not viewed" (list-level problem) from "viewed but no reply" (letter-level problem) using their numbers.
+
+## Your top fixes, in order
+Numbered list, max 6, ordered by expected impact. Each: what to change, exactly how, and why it moves the number. Include rewritten text where useful (e.g. a better title, better first two overview lines, a better first proposal line).
+
+## Test next 14 days
+3-4 concrete experiments with a measurable target (e.g. "first line as a question on 10 proposals, target 30% view rate").
+
+Keep the whole thing tight. No em dashes anywhere.`;
+
+/* ================= state ================= */
 const LS = {
   key: "upw_api_key", model: "upw_model", search: "upw_search",
-  profile: "upw_profile"
+  profile: "upw_profile", theme: "upw_theme",
+  analyzer: "upw_analyzer", insights: "upw_insights"
 };
-let messages = [];      // conversation for refine loop
+let messages = [];        // proposal conversation
+let azMessages = [];      // analyzer conversation
 let busy = false;
 
 const $ = id => document.getElementById(id);
 
-/* ---------- settings ---------- */
+/* ================= theme ================= */
+function applyTheme(t) {
+  document.documentElement.dataset.theme = t;
+  $("themeBtn").textContent = t === "dark" ? "◑" : "◐";
+}
+applyTheme(localStorage.getItem(LS.theme) || "light");
+$("themeBtn").onclick = () => {
+  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  localStorage.setItem(LS.theme, next);
+  applyTheme(next);
+};
+
+/* ================= settings ================= */
 function loadSettings() {
   $("apiKey").value = localStorage.getItem(LS.key) || "";
   $("modelSel").value = localStorage.getItem(LS.model) || "claude-opus-4-8";
@@ -417,88 +662,128 @@ $("saveSettings").onclick = () => {
   $("modalBg").classList.remove("open");
 };
 
-/* ---------- profile persistence ---------- */
+/* ================= view switching ================= */
+document.querySelectorAll(".seg button").forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll(".seg button").forEach(x => x.classList.toggle("active", x === b));
+    document.querySelectorAll(".view").forEach(v =>
+      v.classList.toggle("active", v.id === "view-" + b.dataset.view));
+    hideErr();
+  };
+});
+
+/* ================= persistence ================= */
 const profileFields = ["experience", "tools", "workflow"];
-function loadProfile() {
+const analyzerFields = ["profileText", "azNiche", "azRate", "azInvites", "azProposals", "azViews", "azStats", "azHistory"];
+
+function loadStored(key, fields) {
   try {
-    const p = JSON.parse(localStorage.getItem(LS.profile) || "{}");
-    profileFields.forEach(f => { if (p[f]) $(f).value = p[f]; });
+    const p = JSON.parse(localStorage.getItem(key) || "{}");
+    fields.forEach(f => { if (p[f]) $(f).value = p[f]; });
   } catch {}
 }
-let saveTimer;
-function saveProfile() {
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => {
-    const p = {};
-    profileFields.forEach(f => p[f] = $(f).value);
-    localStorage.setItem(LS.profile, JSON.stringify(p));
-    $("savedNote").classList.add("show");
-    setTimeout(() => $("savedNote").classList.remove("show"), 1200);
-  }, 600);
+function makeSaver(key, fields, noteId) {
+  let t;
+  return () => {
+    clearTimeout(t);
+    t = setTimeout(() => {
+      const p = {};
+      fields.forEach(f => p[f] = $(f).value);
+      localStorage.setItem(key, JSON.stringify(p));
+      if (noteId) {
+        $(noteId).classList.add("show");
+        setTimeout(() => $(noteId).classList.remove("show"), 1200);
+      }
+    }, 600);
+  };
 }
+const saveProfile = makeSaver(LS.profile, profileFields, "savedNote");
+const saveAnalyzer = makeSaver(LS.analyzer, analyzerFields, null);
 profileFields.forEach(f => $(f).addEventListener("input", saveProfile));
+analyzerFields.forEach(f => $(f).addEventListener("input", saveAnalyzer));
 
-/* ---------- step navigation ---------- */
-function goStep(n) {
-  [1,2,3].forEach(i => {
-    $("pane" + i).classList.toggle("active", i === n);
-    const pill = document.querySelector(`.step-pill[data-step="${i}"]`);
-    pill.classList.toggle("active", i === n);
-    pill.classList.toggle("done", i < n);
-  });
-  hideErr();
-  window.scrollTo({ top: 0, behavior: "smooth" });
+/* ================= learning memory ================= */
+function getInsights() {
+  try { return JSON.parse(localStorage.getItem(LS.insights) || "[]"); } catch { return []; }
 }
-document.querySelectorAll(".step-pill").forEach(p =>
-  p.onclick = () => goStep(+p.dataset.step));
-$("toStep2").onclick = () => {
-  if (!$("jobPost").value.trim()) return showErr("Paste the job post first.");
-  goStep(2);
+function setInsights(arr) {
+  localStorage.setItem(LS.insights, JSON.stringify(arr.slice(-30)));
+  renderMemory();
+}
+function memoryBlock() {
+  const ins = getInsights();
+  if (!ins.length) return "";
+  return "# Learning memory (insights from this freelancer's past profile analyses)\n" +
+    ins.map(i => `- [${i.date}] ${i.text}`).join("\n");
+}
+function renderMemory() {
+  const ins = getInsights();
+  $("memCount").textContent = ins.length + " insight" + (ins.length === 1 ? "" : "s");
+  $("memoryEmpty").style.display = ins.length ? "none" : "block";
+  $("memoryList").innerHTML = ins.slice().reverse().map((i, ridx) => {
+    const idx = ins.length - 1 - ridx;
+    return `<div class="memory-item">
+      <span class="when">${i.date}</span>
+      <span class="txt">${escapeHtml(i.text)}</span>
+      <button class="del" data-idx="${idx}" title="Forget this">×</button>
+    </div>`;
+  }).join("");
+  $("memoryList").querySelectorAll(".del").forEach(b =>
+    b.onclick = () => { const a = getInsights(); a.splice(+b.dataset.idx, 1); setInsights(a); });
+  $("proposalMemoryBadge").innerHTML = ins.length
+    ? `<span class="badge">◎ ${ins.length} insight${ins.length === 1 ? "" : "s"} from your profile analyses will shape this letter</span>`
+    : "";
+}
+$("clearMemBtn").onclick = () => {
+  if (getInsights().length && confirm("Forget everything learned from past analyses?")) setInsights([]);
 };
-$("backTo1").onclick = () => goStep(1);
-$("backTo2").onclick = () => goStep(2);
 
-/* ---------- errors ---------- */
-function showErr(msg) {
-  $("errBox").textContent = msg;
-  $("errBox").classList.add("show");
+/* ================= helpers ================= */
+function escapeHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
+function renderMarkdown(md) {
+  const lines = escapeHtml(md).split("\n");
+  let html = "", inList = null;
+  const closeList = () => { if (inList) { html += `</${inList}>`; inList = null; } };
+  for (let line of lines) {
+    line = line.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    if (/^#{1,3}\s+/.test(line)) { closeList(); html += `<h3>${line.replace(/^#{1,3}\s+/, "")}</h3>`; }
+    else if (/^[-*]\s+/.test(line)) {
+      if (inList !== "ul") { closeList(); html += "<ul>"; inList = "ul"; }
+      html += `<li>${line.replace(/^[-*]\s+/, "")}</li>`;
+    }
+    else if (/^\d+[.)]\s+/.test(line)) {
+      if (inList !== "ol") { closeList(); html += "<ol>"; inList = "ol"; }
+      html += `<li>${line.replace(/^\d+[.)]\s+/, "")}</li>`;
+    }
+    else if (line.trim() === "") { closeList(); }
+    else { closeList(); html += `<p>${line}</p>`; }
+  }
+  closeList();
+  return html;
+}
+function showErr(msg) { $("errBox").textContent = msg; $("errBox").classList.add("show"); }
 function hideErr() { $("errBox").classList.remove("show"); }
-
-/* ---------- prompt assembly ---------- */
-function buildUserPrompt() {
-  const parts = [];
-  parts.push("# Upwork job post\n" + $("jobPost").value.trim());
-  const name = $("clientName").value.trim();
-  parts.push("# Client first name\n" + (name || "(not provided, use \"Hi there,\")"));
-  const prof = $("clientProfile").value.trim();
-  if (prof) parts.push("# Client profile signals from Upwork\n" + prof);
-  parts.push("# My strongest relevant experience\n" + ($("experience").value.trim() || "(not provided)"));
-  parts.push("# Tools I actually use\n" + ($("tools").value.trim() || "(not provided)"));
-  parts.push("# My real workflow, step by step\n" + ($("workflow").value.trim() || "(not provided)"));
-  const appr = $("approach").value.trim();
-  if (appr) parts.push("# How I would approach this specific job\n" + appr);
-  parts.push("Research the technical angle behind this job, then write the cover letter following your instructions exactly.");
-  return parts.join("\n\n");
+function needKey() {
+  if (localStorage.getItem(LS.key)) return false;
+  loadSettings();
+  $("modalBg").classList.add("open");
+  showErr("Add your Anthropic API key in Settings first.");
+  return true;
 }
 
-/* ---------- streaming API call ---------- */
-async function callClaude(msgs, onText, onStatus) {
+/* ================= streaming API ================= */
+async function callClaude(msgs, { system, onText, onStatus, maxTokens = 4000, stream = true, outputFormat = null }) {
   const apiKey = localStorage.getItem(LS.key);
   const model = localStorage.getItem(LS.model) || "claude-opus-4-8";
   const useSearch = localStorage.getItem(LS.search) !== "off";
 
-  const body = {
-    model,
-    max_tokens: 4000,
-    thinking: { type: "adaptive" },
-    system: SYSTEM_PROMPT,
-    messages: msgs,
-    stream: true
-  };
-  if (useSearch) {
+  const body = { model, max_tokens: maxTokens, thinking: { type: "adaptive" }, system, messages: msgs, stream };
+  if (useSearch && stream) {
     body.tools = [{ type: "web_search_20260209", name: "web_search", max_uses: 4 }];
   }
+  if (outputFormat) body.output_config = { format: outputFormat };
 
   const resp = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -517,11 +802,16 @@ async function callClaude(msgs, onText, onStatus) {
     throw new Error(`API error ${resp.status}${detail ? ": " + detail : ""}`);
   }
 
-  // parse SSE
+  if (!stream) {
+    const data = await resp.json();
+    const text = data.content.filter(b => b.type === "text").map(b => b.text).join("");
+    return { text, stopReason: data.stop_reason, content: data.content };
+  }
+
   const reader = resp.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "", fullText = "", stopReason = null;
-  const assistantContent = []; // raw content blocks for pause_turn continuation
+  const assistantContent = [];
   let currentBlock = null;
 
   while (true) {
@@ -537,18 +827,18 @@ async function callClaude(msgs, onText, onStatus) {
 
       if (ev.type === "content_block_start") {
         currentBlock = structuredClone(ev.content_block);
-        if (currentBlock.type === "server_tool_use") onStatus("Researching the niche on the web...");
-        if (currentBlock.type === "web_search_tool_result") onStatus("Reading search results...");
-        if (currentBlock.type === "text") onStatus("Writing the letter...");
+        if (currentBlock.type === "server_tool_use") onStatus?.("Searching the web...");
+        if (currentBlock.type === "web_search_tool_result") onStatus?.("Reading search results...");
+        if (currentBlock.type === "text") onStatus?.("Writing...");
       } else if (ev.type === "content_block_delta") {
         if (ev.delta.type === "text_delta" && currentBlock?.type === "text") {
           currentBlock.text += ev.delta.text;
           fullText += ev.delta.text;
-          onText(fullText);
+          onText?.(fullText);
         } else if (ev.delta.type === "input_json_delta" && currentBlock) {
           currentBlock._partial = (currentBlock._partial || "") + ev.delta.partial_json;
         } else if (ev.delta.type === "thinking_delta") {
-          onStatus("Thinking through the angle...");
+          onStatus?.("Thinking...");
         }
       } else if (ev.type === "content_block_stop") {
         if (currentBlock) {
@@ -567,29 +857,59 @@ async function callClaude(msgs, onText, onStatus) {
   return { text: fullText, stopReason, content: assistantContent };
 }
 
-/* run with pause_turn continuation (server-side web search can pause) */
-async function runGeneration(msgs, onText, onStatus) {
+async function runGeneration(msgs, opts) {
   let working = [...msgs];
   let result, attempts = 0;
   do {
-    result = await callClaude(working, onText, onStatus);
+    result = await callClaude(working, opts);
     if (result.stopReason === "pause_turn" && attempts < 4) {
       working = [...working, { role: "assistant", content: result.content }];
-      onStatus("Continuing research...");
+      opts.onStatus?.("Continuing research...");
       attempts++;
     } else break;
   } while (true);
   return { text: result.text, finalMessages: working, lastContent: result.content };
 }
 
-/* ---------- generate & refine ---------- */
+/* ================= proposal flow ================= */
+function goStep(n) {
+  [1,2,3].forEach(i => {
+    $("pane" + i).classList.toggle("active", i === n);
+    const pill = document.querySelector(`.step-pill[data-step="${i}"]`);
+    pill.classList.toggle("active", i === n);
+    pill.classList.toggle("done", i < n);
+  });
+  hideErr();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+document.querySelectorAll(".step-pill").forEach(p => p.onclick = () => goStep(+p.dataset.step));
+$("toStep2").onclick = () => {
+  if (!$("jobPost").value.trim()) return showErr("Paste the job post first.");
+  goStep(2);
+};
+$("backTo1").onclick = () => goStep(1);
+$("backTo2").onclick = () => goStep(2);
+
+function buildProposalPrompt() {
+  const parts = [];
+  parts.push("# Upwork job post\n" + $("jobPost").value.trim());
+  const name = $("clientName").value.trim();
+  parts.push("# Client first name\n" + (name || "(not provided, use \"Hi there,\")"));
+  const prof = $("clientProfile").value.trim();
+  if (prof) parts.push("# Client profile signals from Upwork\n" + prof);
+  parts.push("# My strongest relevant experience\n" + ($("experience").value.trim() || "(not provided)"));
+  parts.push("# Tools I actually use\n" + ($("tools").value.trim() || "(not provided)"));
+  parts.push("# My real workflow, step by step\n" + ($("workflow").value.trim() || "(not provided)"));
+  const appr = $("approach").value.trim();
+  if (appr) parts.push("# How I would approach this specific job\n" + appr);
+  const mem = memoryBlock();
+  if (mem) parts.push(mem);
+  parts.push("Research the technical angle behind this job, then write the cover letter following your instructions exactly.");
+  return parts.join("\n\n");
+}
+
 async function generate(refineInstr) {
-  if (busy) return;
-  if (!localStorage.getItem(LS.key)) {
-    loadSettings();
-    $("modalBg").classList.add("open");
-    return showErr("Add your Anthropic API key in Settings first.");
-  }
+  if (busy || needKey()) return;
   if (!$("jobPost").value.trim()) { goStep(1); return showErr("Paste the job post first."); }
 
   hideErr();
@@ -603,14 +923,15 @@ async function generate(refineInstr) {
   if (refineInstr && messages.length) {
     messages.push({ role: "user", content: refineInstr });
   } else {
-    messages = [{ role: "user", content: buildUserPrompt() }];
+    messages = [{ role: "user", content: buildProposalPrompt() }];
   }
 
-  const onText = t => { $("letterOut").textContent = t; };
-  const onStatus = s => { $("statusText").textContent = s; };
-
   try {
-    const { text, finalMessages, lastContent } = await runGeneration(messages, onText, onStatus);
+    const { text, finalMessages, lastContent } = await runGeneration(messages, {
+      system: PROPOSAL_SYSTEM,
+      onText: t => { $("letterOut").textContent = t; },
+      onStatus: s => { $("statusText").textContent = s; }
+    });
     messages = [...finalMessages, { role: "assistant", content: lastContent }];
     $("letterOut").textContent = text.trim();
     runChecklist(text.trim());
@@ -627,15 +948,14 @@ function setBusyUI(on) {
   $("statusLine").style.display = on ? "flex" : "none";
   $("generateBtn").disabled = on;
   $("regenBtn").disabled = on;
+  $("analyzeBtn").disabled = on;
   document.querySelectorAll(".refine").forEach(c => c.disabled = on);
 }
 
 $("generateBtn").onclick = () => generate();
 $("regenBtn").onclick = () => { messages = []; generate(); };
-document.querySelectorAll(".refine").forEach(c =>
-  c.onclick = () => generate(c.dataset.instr));
+document.querySelectorAll(".refine").forEach(c => c.onclick = () => generate(c.dataset.instr));
 
-/* ---------- checklist validation ---------- */
 function runChecklist(text) {
   const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
   const first = lines[0] || "";
@@ -660,7 +980,6 @@ function runChecklist(text) {
     : `${fails} check${fails > 1 ? "s" : ""} flagged. Use a refine chip or regenerate.`;
 }
 
-/* ---------- copy ---------- */
 $("copyBtn").onclick = async () => {
   const t = $("letterOut").textContent;
   if (!t) return;
@@ -669,22 +988,114 @@ $("copyBtn").onclick = async () => {
   setTimeout(() => $("copyFeedback").textContent = "", 1800);
 };
 
-/* ---------- theme toggle (white/black ↔ black/white) ---------- */
-const THEME_KEY = "upw_theme";
-function applyTheme(t) {
-  document.documentElement.dataset.theme = t;
-  $("themeBtn").textContent = t === "dark" ? "◑" : "◐";
+/* ================= analyzer flow ================= */
+function buildAnalyzerPrompt() {
+  const v = id => $(id).value.trim();
+  const parts = [];
+  parts.push("# My Upwork profile (title, overview, skills)\n" + (v("profileText") || "(not provided)"));
+  parts.push("# Niche / category\n" + (v("azNiche") || "(not provided)"));
+  parts.push("# Rate\n" + (v("azRate") || "(not provided)"));
+  parts.push("# Funnel numbers, last 30 days\n" +
+    `Invites received: ${v("azInvites") || "?"}\n` +
+    `Proposals sent: ${v("azProposals") || "?"}\n` +
+    `Viewed / replied: ${v("azViews") || "?"}`);
+  if (v("azStats")) parts.push("# JSS / badges / hire rate\n" + v("azStats"));
+  if (v("azHistory")) parts.push("# Recent changes\n" + v("azHistory"));
+  if (v("azSample")) parts.push("# A recent proposal that got no view\n" + v("azSample"));
+  const mem = memoryBlock();
+  if (mem) parts.push(mem + "\n\nThe numbers above are CURRENT. Compare against this history: did past advice get applied, did anything move? Go deeper, do not repeat old findings verbatim.");
+  parts.push("Analyze why I am getting fewer invites and why my proposals are not getting viewed. Follow your output format exactly.");
+  return parts.join("\n\n");
 }
-applyTheme(localStorage.getItem(THEME_KEY) || "light");
-$("themeBtn").onclick = () => {
-  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-  localStorage.setItem(THEME_KEY, next);
-  applyTheme(next);
+
+async function analyze() {
+  if (busy || needKey()) return;
+  if (!$("profileText").value.trim()) return showErr("Paste your Upwork profile first.");
+
+  hideErr();
+  busy = true;
+  setBusyUI(true);
+  $("analysisCard").style.display = "block";
+  $("azStatusLine").style.display = "flex";
+  $("analysisOut").innerHTML = "";
+  $("azMeta").textContent = "";
+  $("analysisCard").scrollIntoView({ behavior: "smooth", block: "start" });
+
+  azMessages = [{ role: "user", content: buildAnalyzerPrompt() }];
+
+  try {
+    const { text } = await runGeneration(azMessages, {
+      system: ANALYZER_SYSTEM,
+      maxTokens: 6000,
+      onText: t => { $("analysisOut").innerHTML = renderMarkdown(t); },
+      onStatus: s => { $("azStatusText").textContent = s; }
+    });
+    $("analysisOut").innerHTML = renderMarkdown(text.trim());
+    $("azStatusText").textContent = "Distilling what we learned into memory...";
+    const added = await distillInsights(text.trim());
+    $("azMeta").textContent = added > 0
+      ? `Saved ${added} new insight${added === 1 ? "" : "s"} to learning memory. Future proposals and analyses will use them.`
+      : "Analysis complete. No new insights beyond what memory already holds.";
+  } catch (e) {
+    showErr(e.message);
+  } finally {
+    busy = false;
+    setBusyUI(false);
+    $("azStatusLine").style.display = "none";
+  }
+}
+
+async function distillInsights(analysisText) {
+  const existing = getInsights();
+  const prompt = `Below is a profile analysis for a freelancer. Distill it into 2-5 short, durable insight notes about THIS freelancer that would be useful context for writing their future proposals and running future analyses. Each note: one sentence, specific, factual (a diagnosed weakness, a strength, a number, a fix they were told to make).
+
+${existing.length ? "Already in memory (do NOT duplicate these):\n" + existing.map(i => "- " + i.text).join("\n") + "\n\n" : ""}Analysis:
+${analysisText}`;
+
+  try {
+    const { text } = await callClaude(
+      [{ role: "user", content: prompt }],
+      {
+        system: "You distill analyses into compact memory notes. Output only what the schema asks for.",
+        stream: false,
+        maxTokens: 1000,
+        outputFormat: {
+          type: "json_schema",
+          schema: {
+            type: "object",
+            properties: {
+              insights: { type: "array", items: { type: "string" } }
+            },
+            required: ["insights"],
+            additionalProperties: false
+          }
+        }
+      }
+    );
+    const parsed = JSON.parse(text);
+    const date = new Date().toISOString().slice(0, 10);
+    const fresh = (parsed.insights || []).filter(t => t && t.length > 10).slice(0, 5);
+    if (fresh.length) setInsights([...existing, ...fresh.map(t => ({ date, text: t }))]);
+    return fresh.length;
+  } catch {
+    return 0; // distillation is best-effort; the analysis itself already succeeded
+  }
+}
+
+$("analyzeBtn").onclick = analyze;
+$("azCopyBtn").onclick = async () => {
+  const t = $("analysisOut").innerText;
+  if (!t) return;
+  await navigator.clipboard.writeText(t);
+  $("azCopyFeedback").textContent = "Copied ✓";
+  setTimeout(() => $("azCopyFeedback").textContent = "", 1800);
 };
 
-/* ---------- init ---------- */
+/* ================= init ================= */
 loadSettings();
-loadProfile();
+loadStored(LS.profile, profileFields);
+loadStored(LS.analyzer, analyzerFields);
+renderMemory();
 </script>
 </body>
 </html>
