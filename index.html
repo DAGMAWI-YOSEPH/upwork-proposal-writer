@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposal Writer — Upwork cover letters that get replies</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #fafafa;
+    --surface-2: #f3f3f3;
+    --border: #e2e2e2;
+    --border-focus: #111111;
+    --text: #111111;
+    --text-dim: #555555;
+    --text-faint: #9a9a9a;
+    --accent: #111111;
+    --accent-dim: #f3f3f3;
+    --accent-text: #ffffff;
+    --radius: 12px;
+    --mono: "SF Mono", ui-monospace, Menlo, monospace;
+  }
+  [data-theme="dark"] {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --surface-2: #1d1d1d;
+    --border: #2c2c2c;
+    --border-focus: #f2f2f2;
+    --text: #f2f2f2;
+    --text-dim: #a8a8a8;
+    --text-faint: #6c6c6c;
+    --accent: #f2f2f2;
+    --accent-dim: #1d1d1d;
+    --accent-text: #0a0a0a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    min-height: 100vh;
+    transition: background .2s ease, color .2s ease;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand .logo {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: var(--accent);
+    display: grid; place-items: center;
+    color: var(--accent-text); font-weight: 800; font-size: 18px;
+  }
+  .brand h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+  .brand p { font-size: 12.5px; color: var(--text-dim); }
+  .icon-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text-dim); border-radius: 10px; padding: 8px 14px;
+    cursor: pointer; font-size: 13.5px; display: flex; align-items: center; gap: 7px;
+    transition: border-color .15s, color .15s;
+  }
+  .icon-btn:hover { border-color: var(--border-focus); color: var(--text); }
+  .key-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: transparent; border: 1.5px solid var(--text-faint);
+  }
+  .key-dot.ok { background: var(--text); border-color: var(--text); }
+  .header-actions { display: flex; gap: 8px; }
+
+  /* steps nav */
+  .steps {
+    display: flex; gap: 6px; margin-bottom: 24px;
+  }
+  .step-pill {
+    flex: 1; text-align: center; padding: 9px 6px; border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text-faint); font-size: 13px; font-weight: 600;
+    cursor: pointer; user-select: none; transition: all .15s;
+  }
+  .step-pill.active { background: var(--accent-dim); border-color: var(--border-focus); color: var(--accent); }
+  .step-pill.done { color: var(--text-dim); }
+  .step-pill.done::before { content: "✓ "; color: var(--accent); }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px; margin-bottom: 18px;
+  }
+  .card h2 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .card .sub { color: var(--text-dim); font-size: 13.5px; margin-bottom: 18px; }
+
+  label { display: block; font-size: 13px; font-weight: 600; color: var(--text-dim); margin: 16px 0 6px; }
+  label:first-of-type { margin-top: 0; }
+  label .opt { font-weight: 400; color: var(--text-faint); }
+  textarea, input[type="text"], input[type="password"], select {
+    width: 100%; background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 9px; color: var(--text); padding: 11px 13px;
+    font-size: 14px; font-family: inherit; resize: vertical;
+    transition: border-color .15s;
+  }
+  textarea:focus, input:focus, select:focus { outline: none; border-color: var(--border-focus); }
+  textarea::placeholder, input::placeholder { color: var(--text-faint); }
+  .hint { font-size: 12px; color: var(--text-faint); margin-top: 5px; }
+
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 640px) { .row { grid-template-columns: 1fr; } }
+
+  .btn {
+    background: var(--accent); color: var(--accent-text); border: none;
+    border-radius: 10px; padding: 12px 22px; font-size: 14.5px; font-weight: 700;
+    cursor: pointer; transition: filter .15s, transform .05s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn:hover { filter: brightness(1.1); }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn.ghost {
+    background: transparent; color: var(--text-dim);
+    border: 1px solid var(--border);
+  }
+  .btn.ghost:hover { color: var(--text); border-color: var(--border-focus); }
+  .actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 22px; }
+  .actions .right { display: flex; gap: 10px; margin-left: auto; }
+
+  .pane { display: none; }
+  .pane.active { display: block; animation: fadeIn .2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  /* output */
+  .status-line {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+    background: var(--surface-2); border-radius: 9px; margin-bottom: 16px;
+    font-size: 13.5px; color: var(--text-dim);
+  }
+  .spinner {
+    width: 14px; height: 14px; border: 2px solid var(--border);
+    border-top-color: var(--accent); border-radius: 50%;
+    animation: spin .7s linear infinite; flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .letter {
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px 22px; white-space: pre-wrap;
+    font-size: 14.5px; line-height: 1.7; min-height: 120px;
+  }
+  .letter:empty::before { content: "Your letter will appear here."; color: var(--text-faint); }
+
+  .checklist { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .check {
+    font-size: 12px; padding: 5px 11px; border-radius: 999px;
+    border: 1px solid var(--border); color: var(--text-dim);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .check.pass { border-color: var(--text); color: var(--text); }
+  .check.fail { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+  .refine-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .chip {
+    background: var(--surface-2); border: 1px solid var(--border);
+    color: var(--text-dim); border-radius: 999px; padding: 7px 15px;
+    font-size: 13px; cursor: pointer; transition: all .15s;
+  }
+  .chip:hover { border-color: var(--border-focus); color: var(--text); }
+  .chip:disabled { opacity: .4; cursor: not-allowed; }
+
+  .copy-feedback { color: var(--accent); font-size: 13px; }
+  .meta { font-size: 12px; color: var(--text-faint); margin-top: 10px; }
+
+  /* modal */
+  .modal-bg {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6);
+    z-index: 50; align-items: flex-start; justify-content: center; padding: 60px 20px;
+  }
+  .modal-bg.open { display: flex; }
+  .modal {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 26px; width: 100%; max-width: 480px;
+  }
+  .modal h3 { font-size: 16px; margin-bottom: 4px; }
+  .modal .sub { color: var(--text-dim); font-size: 13px; margin-bottom: 14px; }
+
+  .err {
+    background: var(--surface-2); border: 1.5px solid var(--text); color: var(--text);
+    border-radius: 9px; padding: 12px 15px; font-size: 13.5px; margin-bottom: 16px;
+    display: none; white-space: pre-wrap; font-weight: 500;
+  }
+  .err::before { content: "⚠ "; }
+  .err.show { display: block; }
+
+  .saved-note { font-size: 12px; color: var(--accent); opacity: 0; transition: opacity .3s; }
+  .saved-note.show { opacity: 1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo">P</div>
+      <div>
+        <h1>Proposal Writer</h1>
+        <p>Upwork cover letters that open with a hook, not a pitch</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="themeBtn" title="Toggle black / white theme" aria-label="Toggle theme">◐</button>
+      <button class="icon-btn" id="settingsBtn"><span class="key-dot" id="keyDot"></span> Settings</button>
+    </div>
+  </header>
+
+  <div class="steps">
+    <div class="step-pill active" data-step="1">1 · Job post</div>
+    <div class="step-pill" data-step="2">2 · Your context</div>
+    <div class="step-pill" data-step="3">3 · Letter</div>
+  </div>
+
+  <div class="err" id="errBox"></div>
+
+  <!-- STEP 1 -->
+  <div class="pane active" id="pane1">
+    <div class="card">
+      <h2>Paste the job post</h2>
+      <p class="sub">The full text of the Upwork job post. The opener question gets built from real pain points found in here.</p>
+
+      <label for="jobPost">Job post</label>
+      <textarea id="jobPost" rows="10" placeholder="Paste the entire Upwork job post here..."></textarea>
+
+      <div class="row" style="margin-top:16px">
+        <div>
+          <label for="clientName">Client first name <span class="opt">(optional)</span></label>
+          <input type="text" id="clientName" placeholder="e.g. Sarah">
+          <p class="hint">Used in the salutation. Leave blank for "Hi there,".</p>
+        </div>
+        <div>
+          <label for="clientProfile">Client profile signals <span class="opt">(optional)</span></label>
+          <input type="text" id="clientProfile" placeholder="e.g. $40k spent, 80% hire rate, repeat hirer">
+          <p class="hint">Total spend, hire rate, past jobs, reviews they left.</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <div class="right">
+          <button class="btn" id="toStep2">Next: your context →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="pane" id="pane2">
+    <div class="card">
+      <h2>Your context <span class="saved-note" id="savedNote">saved ✓</span></h2>
+      <p class="sub">This is what makes the letter educate instead of boast. Saved in your browser so you only fill it once.</p>
+
+      <label for="experience">Strongest relevant experience for this job</label>
+      <textarea id="experience" rows="3" placeholder="Past work that maps directly to this job. Include portfolio links if you have them."></textarea>
+
+      <label for="tools">Tools you actually use</label>
+      <textarea id="tools" rows="2" placeholder="e.g. Figma, Webflow, GA4, Hotjar..."></textarea>
+
+      <label for="workflow">Your real workflow, step by step</label>
+      <textarea id="workflow" rows="4" placeholder="1. Audit the existing funnel&#10;2. Wireframe in Figma&#10;3. ..."></textarea>
+
+      <label for="approach">How you'd approach this specific job <span class="opt">(optional but powerful)</span></label>
+      <textarea id="approach" rows="3" placeholder="Anything specific to this niche, stack, or industry that you'd do."></textarea>
+
+      <div class="actions">
+        <button class="btn ghost" id="backTo1">← Back</button>
+        <div class="right">
+          <button class="btn" id="generateBtn">✦ Write my proposal</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="pane" id="pane3">
+    <div class="card">
+      <h2>Your cover letter</h2>
+      <p class="sub">Plain text, ready to paste into Upwork.</p>
+
+      <div class="status-line" id="statusLine" style="display:none">
+        <div class="spinner"></div>
+        <span id="statusText">Researching the niche...</span>
+      </div>
+
+      <div class="letter" id="letterOut"></div>
+
+      <div class="checklist" id="checklist"></div>
+      <p class="meta" id="metaLine"></p>
+
+      <div class="refine-bar">
+        <button class="chip refine" data-instr="Make it shorter and tighter. Cut anything that is not pulling weight. Keep the hook question, salutation, research backing, process, one strategic question, and soft CTA.">✂ Shorter</button>
+        <button class="chip refine" data-instr="Rework the opening hook question with a completely different technical angle. Research a new angle if needed. Keep everything else roughly the same.">↻ New hook angle</button>
+        <button class="chip refine" data-instr="Make the tone slightly more casual and conversational while staying professional. No slang, just looser sentences and a more human rhythm.">☺ More casual</button>
+        <button class="chip refine" data-instr="Run another strict humanizer pass. Hunt for any remaining AI tells: stock phrasing, uniform sentence length, rule-of-three patterns, hedging filler, promotional adjectives. Rewrite only what needs it.">⚡ Humanize again</button>
+      </div>
+
+      <div class="actions">
+        <button class="btn ghost" id="backTo2">← Edit context</button>
+        <div class="right">
+          <span class="copy-feedback" id="copyFeedback" style="align-self:center"></span>
+          <button class="btn ghost" id="regenBtn">↻ Regenerate</button>
+          <button class="btn" id="copyBtn">Copy letter</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h3>Settings</h3>
+    <p class="sub">Your API key is stored only in this browser (localStorage) and sent only to api.anthropic.com.</p>
+
+    <label for="apiKey">Anthropic API key</label>
+    <input type="password" id="apiKey" placeholder="sk-ant-...">
+    <p class="hint">Get one at console.anthropic.com → API keys.</p>
+
+    <label for="modelSel">Model</label>
+    <select id="modelSel">
+      <option value="claude-opus-4-8">Claude Opus 4.8 — best quality (default)</option>
+      <option value="claude-sonnet-4-6">Claude Sonnet 4.6 — faster, cheaper</option>
+      <option value="claude-haiku-4-5">Claude Haiku 4.5 — fastest</option>
+    </select>
+
+    <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+      <input type="checkbox" id="webSearchToggle" checked style="width:auto">
+      Use web search for the research step
+    </label>
+    <p class="hint">Finds real stats, studies and reference cases to back the opening hook. Recommended.</p>
+
+    <div class="actions">
+      <div class="right">
+        <button class="btn ghost" id="closeModal">Cancel</button>
+        <button class="btn" id="saveSettings">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ---------- system prompt: the upwork-proposal skill, distilled ---------- */
+const SYSTEM_PROMPT = `You are an expert Upwork proposal writer. You write cover letters that read like a real person wrote them, grounded in genuine technical research. The goal is a short letter that gives the client value and shows understanding, not a salesy pitch.
+
+## Research first
+Before writing, use web search (if available) to find concrete technical or industry detail tied to the work itself: the platform, the stack, the deliverable, the niche pattern, or the specific pain the client described. Look for:
+- A measurable benchmark, study, or stat that validates the client's instinct
+- A well-known reference case in the same niche/stack that demonstrates the pattern done right or wrong
+- A common technical pitfall in that workflow that a skilled freelancer would catch
+Capture named references and specific numbers. Never fabricate a study, stat, or reference. If search returns nothing usable, fall back on a precise technical observation drawn directly from the job post's wording.
+Do NOT use the client's location or local businesses as the basis of the opener. Location-based hooks are banned.
+
+## Letter structure (follow exactly)
+1. OPEN WITH A GRABBING TECHNICAL QUESTION. The very first line must be a question, technical and job-specific. It must (a) name a real pain point, design choice, or technical decision pulled from the job post or niche, and (b) demonstrate insider knowledge of the deliverable. No compliments, no pitches, no generic claims, no location references in the opener.
+2. THEN A SALUTATION on its own line. "Hello [first name]" if a name was provided, otherwise "Hi there,".
+3. BACK UP THE HOOK. 1-2 sentences expanding the technical observation, referencing an actual study, stat, named tool, or reference site where possible. Prove the opener was not bait.
+4. EDUCATE, DON'T BOAST. Walk through the freelancer's exact process in plain terms, specific about tools, steps, and decisions. Give value, show understanding of the need. Do not assert that they are good.
+5. ONE SMART QUESTION. A single strategic mid-letter question showing understanding of the business need, positioning the freelancer as a collaborator. Separate from the opening hook.
+6. LOW-PRESSURE CTA. Soft close inviting a reply or offering work examples. No urgency.
+
+## Voice and hard rules
+- Casual and professional at the same time, the whole way through.
+- NEVER use em dashes (—) or en dashes (–). Use periods, commas, or "and" instead.
+- Never sound salesy. If a line reads like a marketing slogan, rewrite it as something a real person would say.
+- No exaggeration. Only claims grounded in what the freelancer provided.
+- Keep it short and skimmable. This is an Upwork cover letter, not a job application.
+- Write at a human cadence. Vary sentence length. Short ones too.
+
+## Humanizer pass (mandatory, before output)
+Before producing the final letter, silently run an AI-tell pass over your draft and fix:
+- Stock AI phrasing ("I'd love to", "I noticed that", "delve", "leverage", "seamless", "robust", "I'm excited to")
+- Rule-of-three lists, negative parallelisms ("not just X, but Y"), and uniform sentence rhythm
+- Promotional adjectives, hedging filler, vague attributions ("studies show" without a name)
+- Em dashes of any kind
+- Any opener that compliments, pitches, or references location
+
+## Output format
+Output ONLY the final letter as plain text the user can paste straight into Upwork. No preamble, no headings, no markdown, no commentary, no quotes around it. Just the letter.`;
+
+/* ---------- state ---------- */
+const LS = {
+  key: "upw_api_key", model: "upw_model", search: "upw_search",
+  profile: "upw_profile"
+};
+let messages = [];      // conversation for refine loop
+let busy = false;
+
+const $ = id => document.getElementById(id);
+
+/* ---------- settings ---------- */
+function loadSettings() {
+  $("apiKey").value = localStorage.getItem(LS.key) || "";
+  $("modelSel").value = localStorage.getItem(LS.model) || "claude-opus-4-8";
+  $("webSearchToggle").checked = localStorage.getItem(LS.search) !== "off";
+  updateKeyDot();
+}
+function updateKeyDot() {
+  $("keyDot").classList.toggle("ok", !!localStorage.getItem(LS.key));
+}
+$("settingsBtn").onclick = () => { loadSettings(); $("modalBg").classList.add("open"); };
+$("closeModal").onclick = () => $("modalBg").classList.remove("open");
+$("modalBg").onclick = e => { if (e.target === $("modalBg")) $("modalBg").classList.remove("open"); };
+$("saveSettings").onclick = () => {
+  const k = $("apiKey").value.trim();
+  if (k) localStorage.setItem(LS.key, k); else localStorage.removeItem(LS.key);
+  localStorage.setItem(LS.model, $("modelSel").value);
+  localStorage.setItem(LS.search, $("webSearchToggle").checked ? "on" : "off");
+  updateKeyDot();
+  $("modalBg").classList.remove("open");
+};
+
+/* ---------- profile persistence ---------- */
+const profileFields = ["experience", "tools", "workflow"];
+function loadProfile() {
+  try {
+    const p = JSON.parse(localStorage.getItem(LS.profile) || "{}");
+    profileFields.forEach(f => { if (p[f]) $(f).value = p[f]; });
+  } catch {}
+}
+let saveTimer;
+function saveProfile() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    const p = {};
+    profileFields.forEach(f => p[f] = $(f).value);
+    localStorage.setItem(LS.profile, JSON.stringify(p));
+    $("savedNote").classList.add("show");
+    setTimeout(() => $("savedNote").classList.remove("show"), 1200);
+  }, 600);
+}
+profileFields.forEach(f => $(f).addEventListener("input", saveProfile));
+
+/* ---------- step navigation ---------- */
+function goStep(n) {
+  [1,2,3].forEach(i => {
+    $("pane" + i).classList.toggle("active", i === n);
+    const pill = document.querySelector(`.step-pill[data-step="${i}"]`);
+    pill.classList.toggle("active", i === n);
+    pill.classList.toggle("done", i < n);
+  });
+  hideErr();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+document.querySelectorAll(".step-pill").forEach(p =>
+  p.onclick = () => goStep(+p.dataset.step));
+$("toStep2").onclick = () => {
+  if (!$("jobPost").value.trim()) return showErr("Paste the job post first.");
+  goStep(2);
+};
+$("backTo1").onclick = () => goStep(1);
+$("backTo2").onclick = () => goStep(2);
+
+/* ---------- errors ---------- */
+function showErr(msg) {
+  $("errBox").textContent = msg;
+  $("errBox").classList.add("show");
+}
+function hideErr() { $("errBox").classList.remove("show"); }
+
+/* ---------- prompt assembly ---------- */
+function buildUserPrompt() {
+  const parts = [];
+  parts.push("# Upwork job post\n" + $("jobPost").value.trim());
+  const name = $("clientName").value.trim();
+  parts.push("# Client first name\n" + (name || "(not provided, use \"Hi there,\")"));
+  const prof = $("clientProfile").value.trim();
+  if (prof) parts.push("# Client profile signals from Upwork\n" + prof);
+  parts.push("# My strongest relevant experience\n" + ($("experience").value.trim() || "(not provided)"));
+  parts.push("# Tools I actually use\n" + ($("tools").value.trim() || "(not provided)"));
+  parts.push("# My real workflow, step by step\n" + ($("workflow").value.trim() || "(not provided)"));
+  const appr = $("approach").value.trim();
+  if (appr) parts.push("# How I would approach this specific job\n" + appr);
+  parts.push("Research the technical angle behind this job, then write the cover letter following your instructions exactly.");
+  return parts.join("\n\n");
+}
+
+/* ---------- streaming API call ---------- */
+async function callClaude(msgs, onText, onStatus) {
+  const apiKey = localStorage.getItem(LS.key);
+  const model = localStorage.getItem(LS.model) || "claude-opus-4-8";
+  const useSearch = localStorage.getItem(LS.search) !== "off";
+
+  const body = {
+    model,
+    max_tokens: 4000,
+    thinking: { type: "adaptive" },
+    system: SYSTEM_PROMPT,
+    messages: msgs,
+    stream: true
+  };
+  if (useSearch) {
+    body.tools = [{ type: "web_search_20260209", name: "web_search", max_uses: 4 }];
+  }
+
+  const resp = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true"
+    },
+    body: JSON.stringify(body)
+  });
+
+  if (!resp.ok) {
+    let detail = "";
+    try { detail = (await resp.json()).error?.message || ""; } catch {}
+    throw new Error(`API error ${resp.status}${detail ? ": " + detail : ""}`);
+  }
+
+  // parse SSE
+  const reader = resp.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "", fullText = "", stopReason = null;
+  const assistantContent = []; // raw content blocks for pause_turn continuation
+  let currentBlock = null;
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split("\n");
+    buffer = lines.pop();
+    for (const line of lines) {
+      if (!line.startsWith("data: ")) continue;
+      let ev;
+      try { ev = JSON.parse(line.slice(6)); } catch { continue; }
+
+      if (ev.type === "content_block_start") {
+        currentBlock = structuredClone(ev.content_block);
+        if (currentBlock.type === "server_tool_use") onStatus("Researching the niche on the web...");
+        if (currentBlock.type === "web_search_tool_result") onStatus("Reading search results...");
+        if (currentBlock.type === "text") onStatus("Writing the letter...");
+      } else if (ev.type === "content_block_delta") {
+        if (ev.delta.type === "text_delta" && currentBlock?.type === "text") {
+          currentBlock.text += ev.delta.text;
+          fullText += ev.delta.text;
+          onText(fullText);
+        } else if (ev.delta.type === "input_json_delta" && currentBlock) {
+          currentBlock._partial = (currentBlock._partial || "") + ev.delta.partial_json;
+        } else if (ev.delta.type === "thinking_delta") {
+          onStatus("Thinking through the angle...");
+        }
+      } else if (ev.type === "content_block_stop") {
+        if (currentBlock) {
+          if (currentBlock._partial !== undefined) {
+            try { currentBlock.input = JSON.parse(currentBlock._partial || "{}"); } catch {}
+            delete currentBlock._partial;
+          }
+          assistantContent.push(currentBlock);
+          currentBlock = null;
+        }
+      } else if (ev.type === "message_delta") {
+        stopReason = ev.delta.stop_reason;
+      }
+    }
+  }
+  return { text: fullText, stopReason, content: assistantContent };
+}
+
+/* run with pause_turn continuation (server-side web search can pause) */
+async function runGeneration(msgs, onText, onStatus) {
+  let working = [...msgs];
+  let result, attempts = 0;
+  do {
+    result = await callClaude(working, onText, onStatus);
+    if (result.stopReason === "pause_turn" && attempts < 4) {
+      working = [...working, { role: "assistant", content: result.content }];
+      onStatus("Continuing research...");
+      attempts++;
+    } else break;
+  } while (true);
+  return { text: result.text, finalMessages: working, lastContent: result.content };
+}
+
+/* ---------- generate & refine ---------- */
+async function generate(refineInstr) {
+  if (busy) return;
+  if (!localStorage.getItem(LS.key)) {
+    loadSettings();
+    $("modalBg").classList.add("open");
+    return showErr("Add your Anthropic API key in Settings first.");
+  }
+  if (!$("jobPost").value.trim()) { goStep(1); return showErr("Paste the job post first."); }
+
+  hideErr();
+  goStep(3);
+  busy = true;
+  setBusyUI(true);
+  $("letterOut").textContent = "";
+  $("checklist").innerHTML = "";
+  $("metaLine").textContent = "";
+
+  if (refineInstr && messages.length) {
+    messages.push({ role: "user", content: refineInstr });
+  } else {
+    messages = [{ role: "user", content: buildUserPrompt() }];
+  }
+
+  const onText = t => { $("letterOut").textContent = t; };
+  const onStatus = s => { $("statusText").textContent = s; };
+
+  try {
+    const { text, finalMessages, lastContent } = await runGeneration(messages, onText, onStatus);
+    messages = [...finalMessages, { role: "assistant", content: lastContent }];
+    $("letterOut").textContent = text.trim();
+    runChecklist(text.trim());
+  } catch (e) {
+    showErr(e.message + (e.message.includes("Failed to fetch")
+      ? "\nIf this persists, check your network or that the API key is valid." : ""));
+  } finally {
+    busy = false;
+    setBusyUI(false);
+  }
+}
+
+function setBusyUI(on) {
+  $("statusLine").style.display = on ? "flex" : "none";
+  $("generateBtn").disabled = on;
+  $("regenBtn").disabled = on;
+  document.querySelectorAll(".refine").forEach(c => c.disabled = on);
+}
+
+$("generateBtn").onclick = () => generate();
+$("regenBtn").onclick = () => { messages = []; generate(); };
+document.querySelectorAll(".refine").forEach(c =>
+  c.onclick = () => generate(c.dataset.instr));
+
+/* ---------- checklist validation ---------- */
+function runChecklist(text) {
+  const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+  const first = lines[0] || "";
+  const words = text.split(/\s+/).filter(Boolean).length;
+  const questions = (text.match(/\?/g) || []).length;
+
+  const checks = [
+    { label: "Opens with a question", pass: first.endsWith("?") },
+    { label: "No em or en dashes", pass: !/[—–]/.test(text) },
+    { label: "Salutation after hook", pass: /^(hello|hi|hey)\b/i.test(lines[1] || "") },
+    { label: "Has a mid-letter question", pass: questions >= 2 },
+    { label: `Short (${words} words)`, pass: words <= 220 }
+  ];
+
+  $("checklist").innerHTML = checks.map(c =>
+    `<span class="check ${c.pass ? "pass" : "fail"}">${c.pass ? "✓" : "✕"} ${c.label}</span>`
+  ).join("");
+
+  const fails = checks.filter(c => !c.pass).length;
+  $("metaLine").textContent = fails === 0
+    ? "All checks passed. Paste it in and good luck."
+    : `${fails} check${fails > 1 ? "s" : ""} flagged. Use a refine chip or regenerate.`;
+}
+
+/* ---------- copy ---------- */
+$("copyBtn").onclick = async () => {
+  const t = $("letterOut").textContent;
+  if (!t) return;
+  await navigator.clipboard.writeText(t);
+  $("copyFeedback").textContent = "Copied ✓";
+  setTimeout(() => $("copyFeedback").textContent = "", 1800);
+};
+
+/* ---------- theme toggle (white/black ↔ black/white) ---------- */
+const THEME_KEY = "upw_theme";
+function applyTheme(t) {
+  document.documentElement.dataset.theme = t;
+  $("themeBtn").textContent = t === "dark" ? "◑" : "◐";
+}
+applyTheme(localStorage.getItem(THEME_KEY) || "light");
+$("themeBtn").onclick = () => {
+  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+};
+
+/* ---------- init ---------- */
+loadSettings();
+loadProfile();
+</script>
+</body>
+</html>
